@@ -1,0 +1,10 @@
+reference "Loop.shl"
+
+class Program{
+	static void main(){
+		Loop.loop(5);
+		
+		Loop instance;
+		instance.printFunction();
+	}
+}
