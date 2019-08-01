@@ -1,8 +1,7 @@
 %{
+#include "Shaeli/PrecompiledHeaders/PrecompiledHeaders.h"
 
 #include "Parser/parser.tab.h"
-#include <string>
-#include <stack>
 
 std::string currentLexeme;
 std::string lastLexeme;

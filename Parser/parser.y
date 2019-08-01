@@ -1,8 +1,5 @@
 %{
-
-#include <string>
-#include <iostream>
-#include <stack>
+#include "Shaeli/PrecompiledHeaders/PrecompiledHeaders.h"
 
 #include "Shaeli/Shaeli.h"
 
@@ -19,11 +16,12 @@ FILE* outputFile;
 
 std::string inputDirectory = "Input";
 std::string outputDirectory = "Output";
-std::string inputFile = "sample.shl";
-std::string outputFileName = "output.c";
+std::string inputFile = "Sample.shl";
+std::string outputFileName = "Output.c";
 
 bool isStatic = false;
 std::string varType = "";
+std::string currentSymbol = "";
 
 std::stack<std::string> stack;
 void push(std::string entry);
@@ -52,7 +50,7 @@ std::string pop();
 %token CUR_BRACE_CLOSE
 %token PAR_OPEN
 %token PAR_CLOSE
-
+	
 %token DOT
 %token SEMI_COLON
 %token COMMA
@@ -94,13 +92,14 @@ func_dec_m : { Shaeli::functionDeclaration(varType, currentLexeme, isStatic); }
 formal_arguments : formal_arguments_list { Shaeli::formalArgumentsEnd(); resetStatic(); }
 	| { Shaeli::emptyFunction(isStatic); Shaeli::formalArgumentsEnd(); resetStatic(); }
 
-formal_arguments_list : formal_arguments_list COMMA declaration { Shaeli::addFormalArgument(varType, currentLexeme, false, isStatic); }
-	| declaration { Shaeli::addFormalArgument(varType, currentLexeme, true, isStatic); }
+formal_arguments_list : formal_arguments_list COMMA declaration { varType = lastLexeme; Shaeli::addFormalArgument(varType, currentLexeme, false, isStatic); }
+	| declaration { varType = lastLexeme; Shaeli::addFormalArgument(varType, currentLexeme, true, isStatic); }
 
 declaration : return_type ID
 
 return_type : INT { varType = "int"; }
 	| VOID { varType = "void"; }
+	| ID { varType = lastLexeme; }
 
 block : CUR_BRACE_OPEN { Shaeli::openCurlyBracket(); } statements_list CUR_BRACE_CLOSE { Shaeli::closeCurlyBracket(); } 
 
@@ -113,15 +112,14 @@ statement : assignment
 	| statement_var_dec
 	
 statement_var_dec : return_type ID SEMI_COLON { Shaeli::statementVariableDeclared(varType, currentLexeme); }
-	| return_type ID OP_ASSIGNMENT expression SEMI_COLON
-	| ID { varType = lastLexeme; } ID SEMI_COLON { Shaeli::statementVariableDeclared(varType, currentLexeme); }
+	| return_type ID { currentSymbol = currentLexeme; Shaeli::statementVarDec(varType, currentLexeme); } OP_ASSIGNMENT expression SEMI_COLON { Shaeli::statementVarDecAssigned(pop(), varType, currentSymbol); }
 	
-assignment : ID { push(Shaeli::getVariablesFullName(currentLexeme)); } OP_ASSIGNMENT expression SEMI_COLON { Shaeli::assignment(pop(), pop()); }
+assignment : lvalue OP_ASSIGNMENT expression SEMI_COLON { Shaeli::assignment(pop(), pop()); }
 	
 print : PRINT PAR_OPEN STRING PAR_CLOSE SEMI_COLON { Shaeli::print(currentLexeme); }
 	
 function_call : ID { Shaeli::functionCall(currentLexeme); } PAR_OPEN actual_arguments PAR_CLOSE
-	| ID { push(currentLexeme); } DOT ID {Shaeli::functionCallClass(currentLexeme, pop());} PAR_OPEN actual_arguments PAR_CLOSE
+	| ID DOT ID {Shaeli::functionCallClass(currentLexeme, lastLexeme);} PAR_OPEN actual_arguments PAR_CLOSE
 	
 actual_arguments : actual_arguments_list
 	|
@@ -131,10 +129,13 @@ actual_arguments_list : actual_arguments_list COMMA expression { Shaeli::addActu
 	
 expression : INTEGER { push(currentLexeme); }
 	| STRING { std::string temp = "\"" + currentLexeme + "\""; push(temp); }
-	| ID { push(Shaeli::getVariablesFullName(currentLexeme)); }
+	| lvalue
 	| expression OP_ADDITION expression { push(Shaeli::binaryOperation("+", pop(), pop())); }
 	| PAR_OPEN expression PAR_CLOSE
 	| function_call { push(Shaeli::functionConstructed()); }
+	
+lvalue : ID { push(Shaeli::getVariablesFullName(currentLexeme)); }
+	| ID DOT ID { push(lastLexeme + "." + currentLexeme); }
 	
 %%
 

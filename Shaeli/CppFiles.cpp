@@ -1,0 +1,10 @@
+#include "PrecompiledHeaders/PrecompiledHeaders.h"
+
+#include "Classes.cpp"
+#include "Expressions.cpp"
+#include "Functions.cpp"
+#include "Statements.cpp"
+#include "Symbols.cpp"
+#include "SymbolTable.cpp"
+#include "Utils.cpp"
+#include "Variables.cpp"

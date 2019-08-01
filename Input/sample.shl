@@ -1,10 +1,58 @@
-reference "Loop.shl"
+reference "Number.shl"
 
 class Program{
 	static void main(){
-		Loop.loop(5);
+		numbers();
 		
-		Loop instance;
-		instance.printFunction();
+		Program program;
+		program.numbers2();
+		
+		numbers3();
+		
+		Number num1;
+		Number num2;
+		num1.value = 10;
+		num2.value = 20;
+		numbers4(num1, num2);
+	}
+	
+	static void numbers(){
+		Number a;
+		Number b;
+		
+		a.value = 2;
+		b.value = 3;
+		
+		int c = a.value + b.value;
+		
+		print("a + b = ${c}.\n");
+	}
+	
+	void numbers2(){
+		Number a;
+		Number b;
+		
+		a.value = 7;
+		b.value = 8;
+		
+		int c = a.value + b.value;
+		
+		print("a + b = ${c}.\n");
+	}
+	
+	static void numbers3(){
+		Number a;
+		a.value = 5;
+		
+		Number b = a;
+		
+		int c = a.value + b.value;
+		
+		print("a + b = ${c}.\n");
+	}
+	
+	static void numbers4(Number a, Number b){
+		int c = a.value + b.value;
+		print("a + b = ${c}.\n");
 	}
 }

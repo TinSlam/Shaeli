@@ -1,7 +1,7 @@
 mkdir Output
 flex Parser/scanner.l
 bison Parser/parser.y
-g++ lex.yy.c parser.tab.c -o target
+g++ lex.yy.c parser.tab.c Shaeli/CppFiles.cpp -o target
 target
 gcc Output/output.c -o target
 move target.exe Output
