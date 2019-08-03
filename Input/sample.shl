@@ -3,7 +3,6 @@ reference "Number.shl"
 class Program{
 	static void main(){
 		numbers();
-		
 		Program program;
 		program.numbers2();
 		
@@ -14,6 +13,11 @@ class Program{
 		num1.value = 10;
 		num2.value = 20;
 		numbers4(num1, num2);
+		
+		int addedValue = add(num1, num2) + 10;
+		print("num1 + num2 + 10 = ${addedValue}.\n");
+		
+		controlFlow();
 	}
 	
 	static void numbers(){
@@ -54,5 +58,32 @@ class Program{
 	static void numbers4(Number a, Number b){
 		int c = a.value + b.value;
 		print("a + b = ${c}.\n");
+	}
+	
+	static int add(Number a, Number b){
+		return a.value + b.value;
+	}
+	
+	static void controlFlow(){
+		Number a;
+		Number b;
+		
+		for(i in 0 to 20 steps 2){
+			a.value = a.value + 1;
+		}
+		
+		if(2){
+			int c = a.value;
+			print("a = ${c}.\n");
+		}elseif(3)
+			;
+		elseif(4){
+		
+		}else{
+		
+		}
+		
+		print("Infinite loop.\n");
+		while(1);
 	}
 }

@@ -6,6 +6,7 @@
 extern std::string currentLexeme;
 extern std::string lastLexeme;
 extern int yylex();
+extern int yylineno;
 extern FILE* yyin;
 
 void yyerror(char const* error);
@@ -38,7 +39,15 @@ std::string pop();
 %token CLASS
 %token REFERENCE
 %token STATIC
+%token RETURN
 %token PRINT
+
+%token IF
+%token WHILE
+%token FOR
+%token IN
+%token TO
+%token STEPS
 
 %token INT
 %token VOID
@@ -54,6 +63,10 @@ std::string pop();
 %token DOT
 %token SEMI_COLON
 %token COMMA
+
+%left ELFSEIF_PREC
+%left ELSEIF
+%left ELSE
 
 %%
 
@@ -102,6 +115,7 @@ return_type : INT { varType = "int"; }
 	| ID { varType = lastLexeme; }
 
 block : CUR_BRACE_OPEN { Shaeli::openCurlyBracket(); } statements_list CUR_BRACE_CLOSE { Shaeli::closeCurlyBracket(); } 
+	| statement
 
 statements_list : statements_list statement
 	|
@@ -110,6 +124,31 @@ statement : assignment
 	| print
 	| expression SEMI_COLON { Shaeli::addStatement(pop()); }
 	| statement_var_dec
+	| if
+	| for
+	| while
+	| return
+	| SEMI_COLON { Shaeli::emptyStatement(); }
+	
+return : RETURN expression SEMI_COLON { Shaeli::returnStatement(pop()); }
+
+while : WHILE PAR_OPEN expression while_m PAR_CLOSE block
+
+while_m : { Shaeli::whileStatementFound(pop()); }
+
+if : IF PAR_OPEN expression if_m PAR_CLOSE block elseifs %prec ELFSEIF_PREC
+	| IF PAR_OPEN expression if_m PAR_CLOSE block elseifs ELSE else_m block
+
+if_m : { Shaeli::ifStatementFound(pop()); }
+	
+elseifs : elseifs ELSEIF PAR_OPEN expression elseif_m PAR_CLOSE block
+	|
+	
+elseif_m : { Shaeli::elseIfStatementFound(pop()); }
+
+else_m : { Shaeli:: elseStatementFound(); }
+	
+for : FOR PAR_OPEN ID { Shaeli::forStatementFound(currentLexeme); } IN expression { Shaeli::forStatementStartFound(pop()); } TO expression { Shaeli::forExpressionFound(pop()); } STEPS expression { Shaeli::forStepsFound(pop()); } PAR_CLOSE block
 	
 statement_var_dec : return_type ID SEMI_COLON { Shaeli::statementVariableDeclared(varType, currentLexeme); }
 	| return_type ID { currentSymbol = currentLexeme; Shaeli::statementVarDec(varType, currentLexeme); } OP_ASSIGNMENT expression SEMI_COLON { Shaeli::statementVarDecAssigned(pop(), varType, currentSymbol); }
@@ -177,5 +216,5 @@ void resetStatic(){
 }
 
 void yyerror(const char* error){
-	printf("Error : %s\n", error);
+	printf("Error on line %d : %s\n", yylineno, error);
 }

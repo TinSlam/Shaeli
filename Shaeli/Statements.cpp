@@ -9,6 +9,49 @@ namespace Shaeli{
 	extern std::list<Variable*> staticVariables;
 	
 	extern FILE* output;
+
+	std::string forSymbol = "";
+	
+	void forStatementFound(std::string variable){
+		forSymbol = variable;
+		fprintf(output, "for(int %s", variable.c_str());
+	}
+	
+	void forStatementStartFound(std::string expression){
+		fprintf(output, " = %s; ", expression.c_str());
+	}
+	
+	void forExpressionFound(std::string expression){
+		fprintf(output, "%s <= %s; ", forSymbol.c_str(), expression.c_str());
+	}
+	
+	void forStepsFound(std::string expression){
+		fprintf(output, "%s += %s)", forSymbol.c_str(), expression.c_str());
+	}
+	
+	void whileStatementFound(std::string expression){
+		fprintf(output, "while(%s)", expression.c_str());
+	}
+	
+	void emptyStatement(){
+		fprintf(output, ";\n");
+	}
+	
+	void ifStatementFound(std::string expression){
+		fprintf(output, "if(%s)", expression.c_str());
+	}
+	
+	void elseIfStatementFound(std::string expression){
+		fprintf(output, "else if(%s)", expression.c_str());
+	}
+	
+	void elseStatementFound(){
+		fprintf(output, "else");
+	}
+	
+	void returnStatement(std::string expression){
+		fprintf(output, "return %s;\n", expression.c_str());
+	}
 	
 	void print(std::string data){
 		std::queue<std::string> variables;
@@ -47,8 +90,9 @@ namespace Shaeli{
 				}
 			}
 		}
-		data += "\", ";
+		data += "\"";
 		if(variables.size() != 0){
+			data += ", ";
 			data += variables.front();
 			variables.pop();
 		}

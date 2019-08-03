@@ -37,6 +37,42 @@ print	{
 	return PRINT;
 }
 
+return	{
+	return RETURN;
+}
+
+if	{
+	return IF;
+}
+
+else	{
+	return ELSE;
+}
+
+elseif	{
+	return ELSEIF;
+}
+
+while	{
+	return WHILE;
+}
+
+for	{
+	return FOR;
+}
+
+to	{
+	return TO;
+}
+
+in	{
+	return IN;
+}
+
+steps	{
+	return STEPS;
+}
+
 "="	{
 	return OP_ASSIGNMENT;
 }
