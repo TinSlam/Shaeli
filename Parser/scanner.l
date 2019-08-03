@@ -81,6 +81,26 @@ steps	{
 	return OP_ADDITION;
 }
 
+"-"	{
+	return OP_SUBTRACTION;
+}
+
+"*"	{
+	return OP_MULTIPLICATION;
+}
+
+"/"	{
+	return OP_DIVISION;
+}
+
+"%"	{
+	return OP_MODULO;
+}
+
+"^"	{
+	return OP_POWER;
+}
+
 "{"	{
 	return CUR_BRACE_OPEN;
 }

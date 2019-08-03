@@ -63,17 +63,22 @@ extern int yydebug;
      INT = 272,
      VOID = 273,
      OP_ASSIGNMENT = 274,
-     OP_ADDITION = 275,
-     CUR_BRACE_OPEN = 276,
-     CUR_BRACE_CLOSE = 277,
-     PAR_OPEN = 278,
-     PAR_CLOSE = 279,
-     DOT = 280,
-     SEMI_COLON = 281,
-     COMMA = 282,
-     ELFSEIF_PREC = 283,
-     ELSEIF = 284,
-     ELSE = 285
+     OP_SUBTRACTION = 275,
+     OP_ADDITION = 276,
+     OP_DIVISION = 277,
+     OP_MULTIPLICATION = 278,
+     OP_POWER = 279,
+     OP_MODULO = 280,
+     CUR_BRACE_OPEN = 281,
+     CUR_BRACE_CLOSE = 282,
+     PAR_OPEN = 283,
+     PAR_CLOSE = 284,
+     DOT = 285,
+     SEMI_COLON = 286,
+     COMMA = 287,
+     ELFSEIF_PREC = 288,
+     ELSEIF = 289,
+     ELSE = 290
    };
 #endif
 

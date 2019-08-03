@@ -53,7 +53,9 @@ std::string pop();
 %token VOID
 
 %token OP_ASSIGNMENT
-%left OP_ADDITION
+%left OP_ADDITION OP_SUBTRACTION
+%left OP_MULTIPLICATION OP_DIVISION
+%left OP_MODULO OP_POWER
 
 %token CUR_BRACE_OPEN
 %token CUR_BRACE_CLOSE
@@ -169,9 +171,16 @@ actual_arguments_list : actual_arguments_list COMMA expression { Shaeli::addActu
 expression : INTEGER { push(currentLexeme); }
 	| STRING { std::string temp = "\"" + currentLexeme + "\""; push(temp); }
 	| lvalue
-	| expression OP_ADDITION expression { push(Shaeli::binaryOperation("+", pop(), pop())); }
+	| binary_operation
 	| PAR_OPEN expression PAR_CLOSE
 	| function_call { push(Shaeli::functionConstructed()); }
+	
+binary_operation : expression OP_ADDITION expression { push(Shaeli::binaryOperation("+", pop(), pop())); }
+	| expression OP_SUBTRACTION expression { push(Shaeli::binaryOperation("-", pop(), pop())); }
+	| expression OP_MULTIPLICATION expression { push(Shaeli::binaryOperation("*", pop(), pop())); }
+	| expression OP_DIVISION expression { push(Shaeli::binaryOperation("/", pop(), pop())); }
+	| expression OP_MODULO expression { push(Shaeli::binaryOperation("%", pop(), pop())); }
+	| expression OP_POWER expression{ push(Shaeli::binaryOperation("^", pop(), pop())); }
 	
 lvalue : ID { push(Shaeli::getVariablesFullName(currentLexeme)); }
 	| ID DOT ID { push(lastLexeme + "." + currentLexeme); }

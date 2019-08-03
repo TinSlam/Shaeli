@@ -17,6 +17,8 @@ class Program{
 		int addedValue = add(num1, num2) + 10;
 		print("num1 + num2 + 10 = ${addedValue}.\n");
 		
+		binaryOperations();
+		
 		controlFlow();
 	}
 	
@@ -85,5 +87,27 @@ class Program{
 		
 		print("Infinite loop.\n");
 		while(1);
+	}
+	
+	static void binaryOperations(){
+		Number a;
+		Number b;
+		
+		a.value = 5;
+		b.value = 4;
+		
+		int addition = a.value + b.value;
+		int subtraction = a.value - b.value;
+		int multiplication = a.value * b.value;
+		int division = a.value / b.value;
+		int modulo = a.value % b.value;
+		int power = a.value ^ b.value;
+		
+		print("Addition : ${addition}.\n");
+		print("Subtraction : ${subtraction}.\n");
+		print("Multiplication : ${multiplication}.\n");
+		print("Division : ${division}.\n");
+		print("Modulo : ${modulo}.\n");
+		print("Power : ${power}.\n");
 	}
 }

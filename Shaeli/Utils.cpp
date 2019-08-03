@@ -35,7 +35,7 @@ namespace Shaeli{
 	void generatePrecode(){
 		fopen_s(&headersFile, (shaeliOutputDirectory + "/ShaeliReferences.h").c_str(), "w");
 		fopen_s(&functionHeadersFiles, (shaeliOutputDirectory + "/FunctionHeaders.h").c_str(), "w");
-		fprintf(output, "#include <stdio.h>\n#include \"ShaeliReferences.h\"\n\n");
+		fprintf(output, "#include <stdio.h>\n#include <math.h>\n#include \"ShaeliReferences.h\"\n\n");
 	}
 	
 	void generateMainFunction(){
