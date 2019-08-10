@@ -46,11 +46,19 @@ namespace Shaeli{
 	}
 	
 	void elseStatementFound(){
-		fprintf(output, "else");
+		fprintf(output, "else ");
 	}
 	
 	void returnStatement(std::string expression){
 		fprintf(output, "return %s;\n", expression.c_str());
+	}
+	
+	void breakStatement(){
+		fprintf(output, "break;\n");
+	}
+	
+	void continueStatement(){
+		fprintf(output, "continue;\n");
 	}
 	
 	void print(std::string data){

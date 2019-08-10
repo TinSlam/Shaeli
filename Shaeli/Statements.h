@@ -5,6 +5,8 @@ namespace Shaeli{
 	void assignment(std::string right, std::string left);
 	void addStatement(std::string statement);
 	void returnStatement(std::string expression);
+	void breakStatement();
+	void continueStatement();
 	void ifStatementFound(std::string expression);
 	void elseIfStatementFound(std::string expression);
 	void elseStatementFound();

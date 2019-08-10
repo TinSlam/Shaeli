@@ -41,6 +41,14 @@ return	{
 	return RETURN;
 }
 
+break	{
+	return BREAK;
+}
+
+continue	{
+	return CONTINUE;
+}
+
 if	{
 	return IF;
 }
@@ -73,6 +81,38 @@ steps	{
 	return STEPS;
 }
 
+"&"	{
+	return BITWISE_AND;
+}
+
+"&&"	{
+	return AND;
+}
+
+"|"	{
+	return BITWISE_OR;
+}
+
+"||"	{
+	return OR;
+}
+
+"!"	{
+	return NOT;
+}
+
+"~"	{
+	return BITWISE_NOT;
+}
+
+">>"	{
+	return SHIFT_RIGHT;
+}
+
+"<<"	{
+	return SHIFT_LEFT;
+}
+
 "="	{
 	return OP_ASSIGNMENT;
 }
@@ -99,6 +139,30 @@ steps	{
 
 "^"	{
 	return OP_POWER;
+}
+
+">"	{
+	return GT;
+}
+
+">="	{
+	return GE;
+}
+
+"<"	{
+	return LT;
+}
+
+"<="	{
+	return LE;
+}
+
+"=="	{
+	return EQ;
+}
+
+"!="	{
+	return NE;
 }
 
 "{"	{

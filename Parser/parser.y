@@ -40,6 +40,8 @@ std::string pop();
 %token REFERENCE
 %token STATIC
 %token RETURN
+%token BREAK
+%token CONTINUE
 %token PRINT
 
 %token IF
@@ -53,9 +55,19 @@ std::string pop();
 %token VOID
 
 %token OP_ASSIGNMENT
+
+%left OR
+%left AND
+%left NOT
+
+%left GE GT NE EQ LE LT
+
 %left OP_ADDITION OP_SUBTRACTION
 %left OP_MULTIPLICATION OP_DIVISION
-%left OP_MODULO OP_POWER
+%left OP_MODULO OP_POWER SHIFT_LEFT SHIFT_RIGHT
+
+%left BITWISE_AND BITWISE_OR
+%left BITWISE_NOT
 
 %token CUR_BRACE_OPEN
 %token CUR_BRACE_CLOSE
@@ -130,9 +142,15 @@ statement : assignment
 	| for
 	| while
 	| return
+	| break
+	| continue
 	| SEMI_COLON { Shaeli::emptyStatement(); }
 	
 return : RETURN expression SEMI_COLON { Shaeli::returnStatement(pop()); }
+
+break : BREAK SEMI_COLON { Shaeli::breakStatement(); }
+
+continue : CONTINUE SEMI_COLON { Shaeli::continueStatement(); }
 
 while : WHILE PAR_OPEN expression while_m PAR_CLOSE block
 
@@ -172,7 +190,11 @@ expression : INTEGER { push(currentLexeme); }
 	| STRING { std::string temp = "\"" + currentLexeme + "\""; push(temp); }
 	| lvalue
 	| binary_operation
-	| PAR_OPEN expression PAR_CLOSE
+	| relational_operation
+	| comparison_operation
+	| bitwise_operation
+	| unary_operation
+	| PAR_OPEN expression PAR_CLOSE { push("(" + pop() + ")"); }
 	| function_call { push(Shaeli::functionConstructed()); }
 	
 binary_operation : expression OP_ADDITION expression { push(Shaeli::binaryOperation("+", pop(), pop())); }
@@ -181,7 +203,25 @@ binary_operation : expression OP_ADDITION expression { push(Shaeli::binaryOperat
 	| expression OP_DIVISION expression { push(Shaeli::binaryOperation("/", pop(), pop())); }
 	| expression OP_MODULO expression { push(Shaeli::binaryOperation("%", pop(), pop())); }
 	| expression OP_POWER expression{ push(Shaeli::binaryOperation("^", pop(), pop())); }
+	| expression SHIFT_LEFT expression{ push(Shaeli::binaryOperation("<<", pop(), pop())); }
+	| expression SHIFT_RIGHT expression{ push(Shaeli::binaryOperation(">>", pop(), pop())); }
 	
+comparison_operation : expression GE expression { push(Shaeli::comparisonOperation(">=", pop(), pop())); }
+	| expression GT expression { push(Shaeli::comparisonOperation(">", pop(), pop())); }
+	| expression LE expression { push(Shaeli::comparisonOperation("<=", pop(), pop())); }
+	| expression LT expression { push(Shaeli::comparisonOperation("<", pop(), pop())); }
+	| expression EQ expression { push(Shaeli::comparisonOperation("==", pop(), pop())); }
+	| expression NE expression { push(Shaeli::comparisonOperation("!=", pop(), pop())); }
+	
+relational_operation : expression AND expression { push(Shaeli::relationalOperation("&&", pop(), pop())); }
+	| expression OR expression { push(Shaeli::relationalOperation("||", pop(), pop())); }
+
+bitwise_operation : expression BITWISE_AND expression { push(Shaeli::bitwiseOperation("&", pop(), pop())); }
+	| expression BITWISE_OR expression { push(Shaeli::bitwiseOperation("|", pop(), pop())); }
+	
+unary_operation : expression BITWISE_NOT expression { push(Shaeli::unaryOperation("~", pop())); }
+	| expression NOT expression { push(Shaeli::unaryOperation("!", pop())); }
+
 lvalue : ID { push(Shaeli::getVariablesFullName(currentLexeme)); }
 	| ID DOT ID { push(lastLexeme + "." + currentLexeme); }
 	
